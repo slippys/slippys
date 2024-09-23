@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+.idea
+/.idea/
+/cdk.context.json
+
+coverage
+/packages/deployment/cdk.context.json
