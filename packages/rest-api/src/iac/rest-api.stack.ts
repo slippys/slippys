@@ -6,12 +6,11 @@ import {ARecord, HostedZone, RecordTarget} from 'aws-cdk-lib/aws-route53';
 import {ApiGateway} from 'aws-cdk-lib/aws-route53-targets';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import {bundlingOptions, nodeRuntime} from 'config';
-import {ICertificate} from 'aws-cdk-lib/aws-certificatemanager';
+import {Certificate, CertificateValidation} from 'aws-cdk-lib/aws-certificatemanager';
 import {appName} from 'config';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export type RestApiStackProps = StackProps & {
-  certificate: ICertificate,
   subdomain: string,
   domainName: string,
 };
@@ -19,6 +18,17 @@ export type RestApiStackProps = StackProps & {
 export class RestApiStack extends Stack {
   constructor(scope: Construct, id: string, props: RestApiStackProps) {
     super(scope, id, props);
+
+    const hostedZone = HostedZone.fromLookup(this, 'hosted-zone', {
+      domainName: props.domainName
+    });
+
+    const fullyQualifiedDomainName = `${props.subdomain}.${props.domainName}`;
+
+    const certificate = new Certificate(this, 'certificate', {
+      domainName: fullyQualifiedDomainName,
+      validation: CertificateValidation.fromDns(hostedZone),
+    });
 
     const fn = new NodejsFunction(this, `${appName}-rest-api-handler`, {
       entry: path.join(__dirname, '../handler.js'),
@@ -40,17 +50,15 @@ export class RestApiStack extends Stack {
     api.root.addProxy({defaultIntegration: lambdaIntegration});
 
     api.addDomainName('domain-name', {
-      domainName: `${props.subdomain}.${props.domainName}`,
-      certificate: props.certificate,
+      domainName: fullyQualifiedDomainName,
+      certificate: certificate,
       endpointType: EndpointType.EDGE
     });
 
     new ARecord(this, 'a-record', {
-      recordName: `${props.subdomain}.${props.domainName}`,
+      recordName: fullyQualifiedDomainName,
       target: RecordTarget.fromAlias(new ApiGateway(api)),
-      zone: HostedZone.fromLookup(this, 'HostedZone', {
-        domainName: props.domainName
-      })
+      zone: hostedZone
     });
 
   }

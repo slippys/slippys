@@ -1,12 +1,12 @@
 {
-  "name": "cdk-template",
-  "version": "0.1.0",
+  "name": "slippys",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
       "build": "pnpm run -r build"
   },
   "devDependencies": {
-    "typescript": "~4.9.3",
+    "typescript": "^5.5.3",
     "esbuild": "^0.24.0"
   }
 }

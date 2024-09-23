@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "tsc -b && cdk deploy --all --require-approval never"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.109",
@@ -22,10 +23,11 @@
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
-    "typescript": "~4.9.3",
+    "typescript": "^5.5.3",
     "typescript-eslint": "^8.6.0",
     "rest-api": "workspace:^",
-    "config": "workspace:^"
+    "config": "workspace:^",
+    "frontend": "workspace:^"
   },
   "dependencies": {
   },

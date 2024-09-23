@@ -1,9 +1,10 @@
 import {SourceMapMode, BundlingOptions} from 'aws-cdk-lib/aws-lambda-nodejs';
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 
-export const appName = 'monorepo-template';
+export const appName = 'storefront';
 export const domainName = 'slippys.cool';
-export const subdomain = appName;
+export const apiSubDomain = 'api';
+export const frontendSubDomain = 'store';
 
 export const bundlingOptions: BundlingOptions = {
   minify: true,
@@ -17,7 +18,7 @@ export const bundlingOptions: BundlingOptions = {
 
 export const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
+  region: 'us-east-1',
 }
 
 export const nodeRuntime = Runtime.NODEJS_18_X
