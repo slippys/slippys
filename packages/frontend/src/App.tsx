@@ -8,6 +8,7 @@ import Contact from './Contact';
 import Footer from './Footer.tsx';
 
 const App: React.FC = () => {
+
   return (
     <Router>
       <NavBar/>
